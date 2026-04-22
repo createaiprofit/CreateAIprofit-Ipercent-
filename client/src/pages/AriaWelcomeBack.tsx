@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { playVoice } from "@/lib/audioManager";
+import { playVoiceLine as playVoice } from "@/lib/audioManager";
 
 const ARIA_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/airria_red_757e847f_29dee1ff.jpg";
 const ARIA_VOICE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/aria_login_voice_8bfb7b7e.wav";

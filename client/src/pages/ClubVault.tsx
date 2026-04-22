@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { playVoice as playVaultVoice, stopVoice as stopVaultVoice } from "@/lib/audioManager";
+import { playVoiceLine as playVaultVoice, stopAudio as stopVaultVoice } from "@/lib/audioManager";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 
