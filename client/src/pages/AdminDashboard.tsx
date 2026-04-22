@@ -66,6 +66,7 @@ function SectionHeader({ label, title, inline }: { label: string; title: string;
 export default function AdminDashboard() {
   const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState<"overview" | "alerts" | "finance" | "bots">("overview");
+  const [appView, setAppView] = useState<"website" | "app">("website");
 
   const TABS = [
     { id: "overview", label: "Overview" },
@@ -82,10 +83,55 @@ export default function AdminDashboard() {
           <div style={{ fontSize: "0.6rem", letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: "0.25rem" }}>CreateAIProfit · Admin</div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 300, color: "#ffffff", margin: 0 }}>War Room</h1>
         </div>
-        <div style={{ display: "flex", gap: "0.75rem" }}>
+        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          {/* WEBSITE / APP TOGGLE */}
+          <div style={{ display: "flex", background: "rgba(255,255,255,0.04)", borderRadius: "4px", padding: "2px", border: "1px solid rgba(255,255,255,0.1)" }}>
+            <button
+              onClick={() => { setAppView("website"); navigate("/"); }}
+              style={{
+                padding: "0.35rem 0.9rem",
+                background: appView === "website" ? "rgba(201,168,76,0.2)" : "transparent",
+                border: appView === "website" ? "1px solid rgba(201,168,76,0.4)" : "1px solid transparent",
+                color: appView === "website" ? "#c9a84c" : "rgba(255,255,255,0.35)",
+                cursor: "pointer",
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: "0.65rem",
+                letterSpacing: "0.25em",
+                textTransform: "uppercase" as const,
+                borderRadius: "3px",
+                transition: "all 0.2s",
+              }}
+            >
+              Website
+            </button>
+            <button
+              onClick={() => { setAppView("app"); navigate("/social"); }}
+              style={{
+                padding: "0.35rem 0.9rem",
+                background: appView === "app" ? "rgba(148,163,170,0.2)" : "transparent",
+                border: appView === "app" ? "1px solid rgba(148,163,170,0.4)" : "1px solid transparent",
+                color: appView === "app" ? "#94A3AA" : "rgba(255,255,255,0.35)",
+                cursor: "pointer",
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: "0.65rem",
+                letterSpacing: "0.25em",
+                textTransform: "uppercase" as const,
+                borderRadius: "3px",
+                transition: "all 0.2s",
+              }}
+            >
+              1% App
+            </button>
+          </div>
           <button onClick={() => navigate("/admin/botengine")} style={S.btn("ghost")}>Bot Engine</button>
           <button onClick={() => navigate("/admin/scheduler")} style={S.btn("ghost")}>Scheduler</button>
           <button onClick={() => navigate("/admin/coldcall")} style={S.btn("ghost")}>Cold Call</button>
+          <button
+            onClick={() => navigate("/")}
+            style={{ ...S.btn("ghost"), color: "rgba(201,168,76,0.7)", borderColor: "rgba(201,168,76,0.2)" }}
+          >
+            ← Home
+          </button>
         </div>
       </div>
 
