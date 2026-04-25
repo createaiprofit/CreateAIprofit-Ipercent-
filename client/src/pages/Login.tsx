@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { playAudioUrl } from "@/lib/audioManager";
+import { playVoiceLine as playVoice } from "@/lib/audioManager";
 import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -51,7 +51,7 @@ export default function Login() {
     const t2 = setTimeout(() => setLine1Visible(true), 900);
     const t3 = setTimeout(() => setLine2Visible(true), 1600);
     const t4 = setTimeout(() => {
-      playAudioUrl(ARIA_VOICE, 0.95);
+      playVoice(ARIA_VOICE, 0.95);
       setGlowPulse(true);
     }, 1800);
     const t5 = setTimeout(() => setGlowPulse(false), 3800);

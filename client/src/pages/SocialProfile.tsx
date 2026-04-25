@@ -90,7 +90,23 @@ function EarningsTab() {
       {/* Recent activity */}
       <div>
         <div className="text-white/30 text-xs uppercase tracking-widest mb-3">Recent Activity</div>
-        <div className="text-center py-8 text-white/15 text-sm">No activity yet — keep engaging to earn.</div>
+        {!data?.transactions?.length ? (
+          <div className="text-center py-8 text-white/15 text-sm">No activity yet — keep engaging to earn.</div>
+        ) : (
+          <div className="space-y-2">
+            {data.transactions.slice(0, 8).map((tx) => (
+              <div key={tx.id} className="flex items-center justify-between bg-white/3 rounded-lg px-3 py-2.5 border border-white/5">
+                <div>
+                  <div className="text-white/70 text-sm">{tx.description ?? tx.type}</div>
+                  <div className="text-white/25 text-xs">{new Date(tx.createdAt).toLocaleDateString()}</div>
+                </div>
+                <div className={`font-semibold text-sm ${parseFloat(String(tx.amount)) >= 0 ? "text-green-400" : "text-red-400"}`}>
+                  {parseFloat(String(tx.amount)) >= 0 ? "+" : ""}${Math.abs(parseFloat(String(tx.amount))).toFixed(2)}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Website side is separate — no affiliate links in the social club */}
@@ -143,8 +159,8 @@ export default function SocialProfile() {
     );
   }
 
-  const displayName = profile?.name ?? user?.name ?? "Member";
-  const avatarUrl = profile?.avatar;
+  const displayName = profile?.displayName ?? user?.name ?? "Member";
+  const avatarUrl = profile?.avatarUrl;
 
   return (
     <div className="min-h-screen bg-black">
@@ -190,7 +206,7 @@ export default function SocialProfile() {
               <span className="text-white font-bold text-lg">{displayName}</span>
               <TierBadge tier={tier as Tier} size="md" />
             </div>
-            {profile?.handle && <div className="text-white/40 text-sm">{profile.handle}</div>}
+            {profile?.city && <div className="text-white/40 text-sm">{profile.city}</div>}
           </div>
         </div>
 
@@ -202,13 +218,13 @@ export default function SocialProfile() {
         <div className="mt-4 grid grid-cols-3 gap-2">
           <div className="bg-white/3 rounded-xl p-3 text-center border border-white/5">
             <div className="text-white font-bold text-lg">
-              ${(parseFloat(String(profile?.walletBalance ?? 0)) * 0.4).toFixed(0)}
+              ${(parseFloat(String(profile?.balanceTotal ?? 0)) * 0.4).toFixed(0)}
             </div>
             <div className="text-white/30 text-xs">Earned</div>
           </div>
           <div className="bg-white/3 rounded-xl p-3 text-center border border-white/5">
             <div className="text-white font-bold text-lg">
-              ${(parseFloat(String(profile?.earningsThisMonth ?? 0)) * 0.4).toFixed(0)}
+              ${(parseFloat(String(profile?.balanceToday ?? 0)) * 0.4).toFixed(0)}
             </div>
             <div className="text-white/30 text-xs">Today</div>
           </div>

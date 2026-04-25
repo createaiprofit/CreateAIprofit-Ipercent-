@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-
+import { speakText, stopSpeech } from "@/lib/audioManager";
 
 // ─── ASSETS ───────────────────────────────────────────────────────────────────
 const CAP_LOGO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/cap_logo_master_9abf3722.png";
@@ -13,7 +13,7 @@ const PRINCE_IMAGES = [
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/staff_img5778_fd726540.jpg",
 ];
 
-// ─── HOST BOTS (21 — multilingual, Machiavelli prompt, affiliate marketing) ────────────────────
+// ─── BABY AVATAR HOSTS (20 — multilingual, LOCKED UNIFORM) ────────────────────
 const HOSTS = [
   {
     id: "strategist",
@@ -1529,6 +1529,48 @@ export default function Home() {
               {/* Divider */}
               <div style={{ width: "1px", height: "60px", background: "linear-gradient(to bottom, transparent, rgba(200,215,240,0.35), transparent)", margin: "0 auto 3rem" }} />
 
+              {/* ── AVATAR ROW: Elon · Closer · Analyst · Senator · Architect · ARIA (center) · Tadow · Trump ── */}
+              <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", alignItems: "flex-end", flexWrap: "wrap", marginBottom: "3rem" }}>
+                {/* Left side: Elon, White Suit, Blue Glasses, Navy Suit, Dark Frames */}
+                {[
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_elon_doge_94782109.png", name: "Elon M.", role: "Doge · First Principles" },
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_white_suit_a2b85830.jpg", name: "Jeff B.", role: "Space · Day One" },
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_blue_glasses_555bc39f.jpg", name: "Sundar P.", role: "Blue Frames · Data Boss" },
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_navy_suit_0f2e5762.jpg", name: "Peter T.", role: "Navy Stripe · Power Move" },
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_gates_glasses_fc426d50.jpg", name: "Bill G.", role: "Dark Frames · Blueprint" },
+                ].map(av => (
+                  <div key={av.name} style={{ textAlign: "center", flex: "0 0 auto" }}>
+                    <div style={{ width: "80px", height: "100px", overflow: "hidden", borderRadius: "4px", border: "1px solid rgba(255,255,255,0.08)", marginBottom: "0.4rem" }}>
+                      <img src={av.img} alt={av.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+                    </div>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.75rem", fontStyle: "italic", color: "rgba(255,255,255,0.7)", marginBottom: "0.15rem" }}>{av.name}</div>
+                    <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.5rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>{av.role}</div>
+                  </div>
+                ))}
+
+                {/* ARIA RABBIT — dead center, larger */}
+                <div style={{ textAlign: "center", flex: "0 0 auto" }}>
+                  <div style={{ width: "130px", height: "170px", overflow: "hidden", borderRadius: "6px", border: "1px solid rgba(200,160,60,0.4)", marginBottom: "0.5rem", boxShadow: "0 0 20px rgba(200,160,60,0.15)" }}>
+                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/aria_rabbit_chair_6056748f.jpg" alt="Aria Rabbit" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+                  </div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", fontStyle: "italic", color: "rgba(200,160,60,0.9)", marginBottom: "0.2rem" }}>Aria Rabbit</div>
+                  <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.55rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(200,160,60,0.5)" }}>CFO · Daily Ops Director</div>
+                </div>
+
+                {/* Right side: Tadow, Trump */}
+                {[
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_lakers_bw_601e75da.jpg", name: "Tadow L.", role: "Lakers #8 · Court Vision" },
+                  { img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/avatar_baby_trump_red_tie_7d82f99e.png", name: "The Negotiator", role: "Red Tie · Art of the Deal" },
+                ].map(av => (
+                  <div key={av.name} style={{ textAlign: "center", flex: "0 0 auto" }}>
+                    <div style={{ width: "80px", height: "100px", overflow: "hidden", borderRadius: "4px", border: "1px solid rgba(255,255,255,0.08)", marginBottom: "0.4rem" }}>
+                      <img src={av.img} alt={av.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+                    </div>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.75rem", fontStyle: "italic", color: "rgba(255,255,255,0.7)", marginBottom: "0.15rem" }}>{av.name}</div>
+                    <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.5rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>{av.role}</div>
+                  </div>
+                ))}
+              </div>
 
               {/* Mission statement */}
               <div style={{ background: "rgba(200,210,230,0.03)", border: "1px solid rgba(200,210,230,0.15)", padding: "2.5rem 2rem", maxWidth: "700px", margin: "0 auto 3rem" }}>
@@ -1541,7 +1583,7 @@ export default function Home() {
               {/* Feature grid */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1.5rem", marginTop: "2rem", textAlign: "left" }}>
                 {[
-                  { icon: "🤖", title: "21 AI Hosts", desc: "21 multilingual AI hosts running income content 24/7 across every market." },
+                  { icon: "🤖", title: "21 AI Hosts", desc: "Multilingual baby avatars running income content 24/7 across every market." },
                   { icon: "📺", title: "21-Episode Series", desc: "The mini-series that teaches the system — real estate, AI, affiliate, and more." },
                   { icon: "🏦", title: "Passive Income", desc: "Airbnb arbitrage, real estate assignments, affiliate drops, and crypto commentary." },
                   { icon: "🌍", title: "Global Reach", desc: "English, Spanish, Russian, Arabic, Hindi, Mandarin, Italian, French, Romanian." },
@@ -1575,9 +1617,99 @@ export default function Home() {
                   {/* Main headline — matches HOME scale */}
                   <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2.5rem, 6vw, 5.5rem)", fontWeight: 300, fontStyle: "italic", color: "#ffffff", lineHeight: 1.1, letterSpacing: "0.01em", marginBottom: "1.5rem", maxWidth: "900px", margin: "0 auto 1.5rem" }}>Meet the future of <em style={{ fontStyle: "italic", color: "rgba(210,225,255,1)" }}>createaiprofit.</em></h2>
                   {/* Subheadline — matches HOME */}
-                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.15rem", fontStyle: "italic", fontWeight: 300, color: "rgba(255,255,255,0.5)", lineHeight: 1.8, letterSpacing: "0.01em", maxWidth: "560px", margin: "0 auto" }}>21 multilingual AI hosts running passive income content 24/7 across every market on earth.</p>
+                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.15rem", fontStyle: "italic", fontWeight: 300, color: "rgba(255,255,255,0.5)", lineHeight: 1.8, letterSpacing: "0.01em", maxWidth: "560px", margin: "0 auto" }}>Multilingual baby avatars running passive income content 24/7 across every market on earth.</p>
               </div>
             </div>
+
+              {/* ── 15 BABY AVATARS — STATIC GRID ── */}
+              <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.75rem", letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(148,163,170,0.4)" }}>
+                  The Company · 21 Hosts · Navy Pinstripe Armani · Rolex · Medallions · Cigars
+                </div>
+              </div>
+
+              {/* ── 21 BABY AVATARS — VOICE GRID ── */}
+              <HostVoiceGrid hosts={HOSTS} />
+
+            </div>
+          </section>
+        )}
+
+        {/* ════ STAFF TAB ════ */}
+        {activeTab === "staff" && (
+          <section style={{ minHeight: "calc(100vh - 64px)", padding: "3rem 1.5rem 5rem", background: "#000" }}>
+            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+
+              {/* ── STAFF TAB HERO ── */}
+              <div style={{ textAlign: "center", marginBottom: "3.5rem", position: "relative" }}>
+                <div style={{ position: "absolute", top: "-3rem", left: "50%", transform: "translateX(-50%)", width: "700px", height: "400px", background: "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(200,215,240,0.06) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+                <div style={{ position: "relative", zIndex: 1 }}>
+                  <img src={CAP_LOGO} alt="CAP" style={{ height: "72px", width: "72px", objectFit: "contain", marginBottom: "0.5rem", filter: "drop-shadow(0 0 24px rgba(200,215,240,0.35))" }} />
+                  <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.75rem", letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(200,210,230,0.5)", marginBottom: "1rem" }}>CreateAIProfit · The Team</div>
+                  <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2.5rem, 6vw, 5.5rem)", fontWeight: 300, fontStyle: "italic", color: "#ffffff", lineHeight: 1.1, letterSpacing: "0.01em", marginBottom: "1.5rem", maxWidth: "900px", margin: "0 auto 1.5rem" }}>The <em style={{ fontStyle: "italic", color: "rgba(210,225,255,1)" }}>Staff.</em></h2>
+                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.15rem", fontStyle: "italic", fontWeight: 300, color: "rgba(255,255,255,0.5)", lineHeight: 1.8, letterSpacing: "0.01em", maxWidth: "560px", margin: "0 auto" }}>AI-powered staff teaching you how to build bots, assign tasks, and monetize. No gatekeeping. This is the 21st-century model.</p>
+                </div>
+              </div>
+
+              {/* ── HEADER NOTE ── */}
+              <div style={{
+                padding: "1.25rem 2rem",
+                marginBottom: "3.5rem",
+                textAlign: "center",
+              }}>
+                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.75rem", letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(148,163,170,0.6)", marginBottom: "0.5rem" }}>
+                  AI-Powered Staff
+                </div>
+                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", fontStyle: "italic", color: "rgba(255,255,255,0.55)", lineHeight: 1.7, maxWidth: "680px", margin: "0 auto" }}>
+                  These are AI-powered staff — teaching you how to build bots, assign tasks, and monetize. No gatekeeping. This is the 21st-century model.
+                </p>
+              </div>
+
+              {/* ── ARIA RABBIT — CFO / DAILY OPS DIRECTOR ── */}
+              <div style={{ textAlign: "center", marginBottom: "4.5rem" }}>
+                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.75rem", letterSpacing: "0.6em", textTransform: "uppercase", color: "rgba(148,163,170,0.5)", marginBottom: "1rem" }}>
+                  CFO · Daily Operations Director · Ultimate Host
+                </div>
+                <img
+                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/aria_staff_photo_1b19d4c1.jpg"
+                  alt="Aria Rabbit"
+                  style={{ height: "320px", width: "auto", objectFit: "contain", display: "block", margin: "0 auto 1rem" }}
+                />
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.25rem", fontWeight: 300, fontStyle: "italic", color: "rgba(255,255,255,0.85)", letterSpacing: "0.04em", marginBottom: "0.3rem" }}>Aria Rabbit</div>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", fontStyle: "italic", color: "rgba(255,255,255,0.45)", marginBottom: "0.5rem" }}>Welcome to the playground, millionaire.</div>
+                <div style={{ fontFamily: "'Lato', sans-serif", fontSize: "0.8rem", color: "rgba(148,163,170,0.6)", maxWidth: "480px", margin: "0 auto", lineHeight: 1.7 }}>
+                  Runs daily operations, manages the 1% Playground app, oversees all 15 bot hosts, and controls the financial dashboard. She doesn’t close deals — she runs the system that closes them.
+                </div>
+              </div>
+
+              {/* ── DIVIDER ── */}
+              <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
+                <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.75rem", letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(148,163,170,0.4)", whiteSpace: "nowrap" }}>
+                  The 20 Baby Bots · AI Hosts
+                </div>
+                <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.06)" }} />
+              </div>
+
+              {/* ── 15 BABY BOTS GRID ── */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "2rem", marginBottom: "4rem" }}>
+                {HOSTS.map((h) => {
+                  const bioMap: Record<string, string> = {"strategist": "Master planner. Maps the 10-million-man mission, positions the brand, and runs the long-game content strategy.", "operator": "Leverage specialist. Manages AI income streams, automates the content pipeline, and runs the backend while you sleep.", "ghost": "Silent operator. Posts cold-system content in Russian, drives Eastern European traffic, and never shows his hand.", "architect": "System builder. Designs the income frameworks, maps the passive streams, and teaches the machine-first mindset.", "consigliere": "White-glove operator. Handles VIP onboarding, luxury affiliate placements, and the Club Vault high-ticket product line.", "don": "Real estate closer. Assigns deals, finds $40k fees, and drops Italian-accented Machiavelli content that converts.", "builder": "Ground-up operator. Builds the Airbnb arbitrage units, runs the sublease model, and posts Spanish-language income content.", "phantom": "Three moves ahead. Runs the Eastern European content arm, posts Romanian-language crypto and real estate content.", "transporter": "British precision operator. Black belt discipline. Moves assets — real estate, crypto, income streams — across borders without a trace.", "tactician": "Mumbai chess master. AI tech developer by day, Sun Tzu war strategist by night. Builds the AI automation stack with surgical precision.", "sheikh": "International syndicate lead. Runs the Gulf real estate desk, manages the Dubai Airbnb luxury portfolio, and posts Arabic-language content.", "visionary": "Billion-market operator. Posts Hindi-language passive income content targeting South Asian audiences. AI profit has no borders.", "director": "Content commander. Scripts the mini-series, directs the avatar video content, and runs the media production arm.", "broker": "Wall Street closer. Runs affiliate drops, crypto commentary, and high-ticket referral funnels. Every post is a pitch.", "king": "Atlanta-built empire. Runs the real estate assignment desk, drops cold-call scripts, and leads the domestic closer network.", "closer": "Deal machine. Closes real estate assignments, runs the cold-call funnel, and posts high-energy closer content 24/7.", "aria": "Runs daily operations, manages the 1% Playground app, oversees all 15 bot hosts, and controls the financial dashboard.", "prince": "Old money operator. Runs the international syndicate, structures generational wealth plays, and positions the brand in European markets.", "dubai_chic": "Dubai division head. Runs the Airbnb luxury unit portfolio, manages high-net-worth affiliate drops, and posts in Hindi and Arabic.", "chinese_closer": "Shanghai precision operator. Runs the Asian market affiliate arm, posts Mandarin-language luxury content, and closes high-ticket deals.", "caucasian_girl": "European connections operator. Manages VIP introductions, luxury Airbnb placements in Monaco and Milan, and the white-glove onboarding flow.", "visionary_mx": "Mexican-American operator. Posts Spanish-English bilingual passive income content targeting Latino audiences across the US and Latin America. The American dream, automated.", "boss": "The BOSS. Michael Corleone energy — calculated, strategic, inevitable. Runs the inner circle, controls the board, and never makes a move without purpose. Power is not given. It is taken."};
+                  return (
+                  <div key={h.id} style={{ textAlign: "center" }}>
+                    <img
+                      src={h.img}
+                      alt={h.title}
+                      style={{ width: "100%", height: "260px", objectFit: "contain", objectPosition: "center", display: "block", marginBottom: "1rem" }}
+                    />
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", fontWeight: 300, fontStyle: "italic", color: "rgba(255,255,255,0.85)", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>{h.title}</div>
+                    <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.5rem", fontWeight: 300, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(148,163,170,0.4)", marginBottom: "0.25rem" }}>{h.origin}</div>
+                    {(h as any).voiceType && <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.5rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.45)", marginBottom: "0.5rem" }}>🎙 {(h as any).voiceType}</div>}
+                    <div style={{ fontFamily: "'Lato', sans-serif", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>{bioMap[h.id] || h.pitch}</div>
+                  </div>
+                  );
+                })}
+              </div>
 
               {/* ── DIVIDER ── */}
               <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>

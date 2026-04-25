@@ -72,13 +72,13 @@ function PostCard({ post, isActive }: { post: FeedPost; isActive: boolean }) {
     if (!isAuthenticated) { window.location.href = getLoginUrl(); return; }
     setLiked(l => !l);
     setLikeCount(c => liked ? c - 1 : c + 1);
-    likeMutation.mutate({ postId: String(post.id) });
+    likeMutation.mutate({ postId: post.id });
   };
 
   const handleComment = () => {
     if (!isAuthenticated) { window.location.href = getLoginUrl(); return; }
     if (!comment.trim()) return;
-    addComment.mutate({ postId: String(post.id), content: comment });
+    addComment.mutate({ postId: post.id, body: comment });
   };
 
   const formatCount = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}K` : String(n);
@@ -309,10 +309,10 @@ export default function SocialFeed() {
   );
 
   useEffect(() => {
-    if (data?.posts) {
+    if (data?.items) {
       setAllPosts(prev => {
         const existingIds = new Set(prev.map(p => p.id));
-        const newItems = (data.posts as unknown as FeedPost[]).filter(p => !existingIds.has(p.id));
+        const newItems = (data.items as FeedPost[]).filter(p => !existingIds.has(p.id));
         return [...prev, ...newItems];
       });
     }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { playAudioUrl as playVaultVoice, stopAudio as stopVaultVoice } from "@/lib/audioManager";
+import { playVoiceLine as playVaultVoice, stopAudio as stopVaultVoice } from "@/lib/audioManager";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 
@@ -162,9 +162,9 @@ function ProductCard({ product, onSelect }: { product: typeof VAULT_CATALOG[0]; 
   const trackClick = trpc.vault.trackClick.useMutation();
 
   const handleBuy = async () => {
-    await trackClick.mutateAsync({ productId: String(product.id) });
-    if (product.affiliateUrl && product.affiliateUrl !== "#book-pod") {
-      window.open(product.affiliateUrl, "_blank", "noopener,noreferrer");
+    const result = await trackClick.mutateAsync({ productId: product.id });
+    if (result?.url && result.url !== "#book-pod") {
+      window.open(result.url, "_blank", "noopener,noreferrer");
     }
   };
 

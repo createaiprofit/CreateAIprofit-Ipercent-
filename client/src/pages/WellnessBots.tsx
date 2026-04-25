@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { playAudioUrl as playVoice, stopAudio as stopVoice } from "@/lib/audioManager";
+import { playVoiceLine as playVoice, stopAudio as stopVoice } from "@/lib/audioManager";
 import { Link } from "wouter";
 
 // ─── CDN ASSETS ───────────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { playAudioUrl as playVoice } from "@/lib/audioManager";
+import { playVoiceLine as playVoice } from "@/lib/audioManager";
 
 const COLOGNE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/confidence_cologne-K4fKhGR4jJ6dvsT5iqjnYh.webp";
 const CAP_LOGO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/cap_monogram-n2pUia97Hqn3kpJpZqwsMY.webp";

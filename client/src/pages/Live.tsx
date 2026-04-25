@@ -310,7 +310,7 @@ export default function Live() {
                 Be the first to say something.
               </div>
             ) : (
-              messages.map((msg: { id: string; userId: string; name: string; avatar: string; tier: string; message: string; ts: number }) => (
+              messages.map((msg: any) => (
                 <div key={msg.id} style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start" }}>
                   {/* Avatar */}
                   <div style={{
