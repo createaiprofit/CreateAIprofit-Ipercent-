@@ -1,82 +1,86 @@
 import { Switch, Route, useLocation } from "wouter";
+import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/theme-provider";
 import { ChevronLeft } from "lucide-react";
 
 // Pages
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import LoginOnboarding from "@/pages/LoginOnboarding";
-import ProfileSetup from "@/pages/ProfileSetup";
-import Terms from "@/pages/Terms";
-import Subscribe from "@/pages/Subscribe";
-import MiniSeries from "@/pages/MiniSeries";
-import Episodes from "@/pages/Episodes";
-import SocialEntry from "@/pages/SocialEntry";
-import SocialFeed from "@/pages/SocialFeed";
-import SocialProfile from "@/pages/SocialProfile";
-import Feed from "@/pages/Feed";
-import InAppWallet from "@/pages/InAppWallet";
-import ClubVault from "@/pages/ClubVault";
-import Staff from "@/pages/Staff";
-import Concierge from "@/pages/Concierge";
-import ConfidenceCologne from "@/pages/ConfidenceCologne";
-import WellnessBots from "@/pages/WellnessBots";
-import CheckMate from "@/pages/CheckMate";
-import BookClub from "@/pages/BookClub";
-import UserMarketplace from "@/pages/UserMarketplace";
-import AriaWelcomeBack from "@/pages/AriaWelcomeBack";
-import Live from "@/pages/Live";
-import BotEnginePanel from "@/pages/BotEnginePanel";
-import PostScheduler from "@/pages/PostScheduler";
-import ColdCallDashboard from "@/pages/ColdCallDashboard";
-import AdminDashboard from "@/pages/AdminDashboard";
-import NotFound from "@/pages/NotFound";
+import Home from "./pages/Home";
+import Staff from "./pages/Staff";
+import MiniSeries from "./pages/MiniSeries";
+import Login from "./pages/Login";
+import LoginOnboarding from "./pages/LoginOnboarding";
+import ProfileSetup from "./pages/ProfileSetup";
+import Feed from "./pages/Feed";
+import SocialFeed from "./pages/SocialFeed";
+import SocialEntry from "./pages/SocialEntry";
+import SocialProfile from "./pages/SocialProfile";
+import InAppWallet from "./pages/InAppWallet";
+import Live from "./pages/Live";
+import AdminDashboard from "./pages/AdminDashboard";
+import BotEnginePanel from "./pages/BotEnginePanel";
+import UserMarketplace from "./pages/UserMarketplace";
+import Subscribe from "./pages/Subscribe";
+import Terms from "./pages/Terms";
+import TierBadge from "./pages/TierBadge";
+import WellnessBots from "./pages/WellnessBots";
+import Episodes from "./pages/Episodes";
+import PostScheduler from "./pages/PostScheduler";
+import ClubVault from "./pages/ClubVault";
+import CheckMate from "./pages/CheckMate";
+import ColdCallDashboard from "./pages/ColdCallDashboard";
+import Concierge from "./pages/Concierge";
+import ConfidenceCologne from "./pages/ConfidenceCologne";
+import BookClub from "./pages/BookClub";
+import AriaWelcomeBack from "./pages/AriaWelcomeBack";
+import NotFound from "./pages/NotFound";
 
-export default function App() {
+// ─── MAIN APP ────────────────────────────────────────────────────────────────
+function AppRoutes() {
   return (
     <Switch>
-      {/* Public / Marketing */}
-      <Route path={"/"} component={Home} />
-      <Route path={"/mini-series"} component={MiniSeries} />
-      <Route path={"/episodes"} component={Episodes} />
-      <Route path={"/subscribe"} component={Subscribe} />
-      <Route path={"/confidence-cologne"} component={ConfidenceCologne} />
-      <Route path={"/wellness"} component={WellnessBots} />
-      <Route path={"/checkmate"} component={CheckMate} />
-      <Route path={"/club-vault"} component={ClubVault} />
-      <Route path={"/concierge"} component={Concierge} />
-      <Route path={"/staff"} component={Staff} />
-      <Route path={"/book-club"} component={BookClub} />
-      <Route path={"/marketplace"} component={UserMarketplace} />
+      {/* ── PUBLIC WEBSITE ── */}
+      <Route path="/" component={Home} />
+      <Route path="/staff" component={Staff} />
+      <Route path="/miniseries" component={MiniSeries} />
+      <Route path="/episodes" component={Episodes} />
 
-      {/* Auth / Onboarding */}
-      <Route path={"/login"} component={Login} />
-      <Route path={"/onboarding"} component={LoginOnboarding} />
-      <Route path={"/profile-setup"} component={ProfileSetup} />
-      <Route path={"/terms"} component={Terms} />
-      <Route path={"/aria-welcome"} component={AriaWelcomeBack} />
+      {/* ── AUTH ── */}
+      <Route path="/login" component={Login} />
+      <Route path="/onboarding" component={LoginOnboarding} />
+      <Route path="/profile-setup" component={ProfileSetup} />
+      <Route path="/subscribe" component={Subscribe} />
+      <Route path="/terms" component={Terms} />
 
-      {/* Social / Members-Only */}
-      <Route path={"/social"} component={SocialEntry} />
-      <Route path={"/social/feed"} component={SocialFeed} />
-      <Route path={"/social/profile"} component={SocialProfile} />
-      <Route path={"/feed"} component={Feed} />
-      <Route path={"/wallet"} component={InAppWallet} />
-      <Route path={"/live"} component={Live} />
+      {/* ── 1% PLAYGROUND APP SIDE ── */}
+      <Route path="/social" component={SocialEntry} />
+      <Route path="/feed" component={Feed} />
+      <Route path="/social-feed" component={SocialFeed} />
+      <Route path="/profile/:id" component={SocialProfile} />
+      <Route path="/wallet" component={InAppWallet} />
+      <Route path="/live" component={Live} />
+      <Route path="/wellness" component={WellnessBots} />
+      <Route path="/marketplace" component={UserMarketplace} />
+      <Route path="/club-vault" component={ClubVault} />
+      <Route path="/checkmate" component={CheckMate} />
+      <Route path="/concierge" component={Concierge} />
+      <Route path="/confidence-cologne" component={ConfidenceCologne} />
+      <Route path="/book-club" component={BookClub} />
+      <Route path="/aria" component={AriaWelcomeBack} />
+      <Route path="/tier-badge" component={TierBadge} />
 
-      {/* Coming Soon tabs */}
-      <Route path={"/dating"} component={() => <ComingSoonTab title="Dating" desc="Exclusive introductions for the 1%." badge="Coming Soon" />} />
-      <Route path={"/oldmoney"} component={() => <ComingSoonTab title="Old Money" desc="For those who inherited the blueprint." badge="55+" />} />
-      <Route path={"/newmoney"} component={() => <ComingSoonTab title="New Money" desc="For those building the blueprint." badge="25 & Under" />} />
-      <Route path={"/bizinvest"} component={() => <ComingSoonTab title="Business & Investment" desc="Deal flow, partnerships, and investment opportunities." />} />
+      {/* ── ADMIN / WAR ROOM ── */}
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/bot-engine" component={BotEnginePanel} />
+      <Route path="/cold-call" component={ColdCallDashboard} />
+      <Route path="/post-scheduler" component={PostScheduler} />
 
-      {/* Admin */}
-      <Route path={"/admin"} component={AdminDashboard} />
-      <Route path={"/admin/botengine"} component={BotEnginePanel} />
-      <Route path={"/admin/scheduler"} component={PostScheduler} />
-      <Route path={"/admin/coldcall"} component={ColdCallDashboard} />
+      {/* ── COMING SOON TABS ── */}
+      <Route path="/vault" component={() => <ComingSoonTab title="The Vault" desc="Exclusive investment opportunities and deal flow." badge="MEMBERS ONLY" />} />
+      <Route path="/download" component={() => <ComingSoonTab title="Download App" desc="The 1% Playground mobile app is coming soon." badge="COMING SOON" />} />
+      <Route path="/bizinvest" component={() => <ComingSoonTab title="Business & Investment" desc="Deal flow, partnerships, and investment opportunities." />} />
 
-      {/* 404 */}
-      <Route path={"/404"} component={NotFound} />
+      {/* ── 404 ── */}
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -88,7 +92,7 @@ function ComingSoonTab({ title, desc, badge }: { title: string; desc: string; ba
   return (
     <div style={{ background: "#000000", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "2rem", paddingBottom: "80px" }}>
       <button
-        onClick={() => navigate("/social")}
+        onClick={() => navigate("/")}
         style={{
           position: "fixed", top: "16px", left: "16px",
           background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
@@ -122,12 +126,32 @@ function ComingSoonTab({ title, desc, badge }: { title: string; desc: string; ba
       <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2rem", fontWeight: 300, color: "#ffffff", marginBottom: "0.75rem", textAlign: "center" }}>
         {title}
       </h2>
-      <p style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.9rem", color: "rgba(255,255,255,0.4)", textAlign: "center", maxWidth: "320px", lineHeight: 1.6 }}>
+      <p style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", textAlign: "center", maxWidth: "320px" }}>
         {desc}
       </p>
-      <div style={{ marginTop: "2rem", fontFamily: "'Rajdhani', sans-serif", fontSize: "0.7rem", letterSpacing: "0.4em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}>
-        Members Only · 1% Playground
-      </div>
+      <button
+        onClick={() => navigate("/")}
+        style={{
+          marginTop: "2rem",
+          background: "linear-gradient(135deg, #c9a84c, #f0d080)",
+          border: "none", borderRadius: "12px", padding: "12px 32px",
+          color: "#000", fontFamily: "'Rajdhani', sans-serif",
+          fontSize: "0.85rem", letterSpacing: "0.15em", fontWeight: 700,
+          cursor: "pointer", textTransform: "uppercase",
+        }}
+      >
+        Return Home
+      </button>
     </div>
+  );
+}
+
+// ─── ROOT ─────────────────────────────────────────────────────────────────────
+export default function App() {
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="cap-theme">
+      <AppRoutes />
+      <Toaster />
+    </ThemeProvider>
   );
 }
