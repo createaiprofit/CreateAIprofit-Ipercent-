@@ -21,7 +21,7 @@ import BotEnginePanel from "./pages/BotEnginePanel";
 import UserMarketplace from "./pages/UserMarketplace";
 import Subscribe from "./pages/Subscribe";
 import Terms from "./pages/Terms";
-import TierBadge from "./pages/TierBadge";
+import { TierBadge } from "./pages/TierBadge";
 import WellnessBots from "./pages/WellnessBots";
 import Episodes from "./pages/Episodes";
 import PostScheduler from "./pages/PostScheduler";
@@ -66,8 +66,7 @@ function AppRoutes() {
       <Route path="/confidence-cologne" component={ConfidenceCologne} />
       <Route path="/book-club" component={BookClub} />
       <Route path="/aria" component={AriaWelcomeBack} />
-      <Route path="/tier-badge" component={TierBadge} />
-
+      
       {/* ── ADMIN / WAR ROOM ── */}
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/bot-engine" component={BotEnginePanel} />

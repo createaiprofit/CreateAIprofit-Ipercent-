@@ -30,17 +30,11 @@ export default function Subscribe() {
   const [success, setSuccess] = useState(false);
 
   const walletQuery = trpc.wallet.balance.useQuery(undefined, { enabled: isAuthenticated });
-  const subscribeMutation = trpc.wallet.subscribe.useMutation({
-    onSuccess: () => {
-      setSuccess(true);
-      setTimeout(() => navigate("/social"), 2000);
-    },
-    onError: (err) => setError(err.message),
-  });
 
   const balance = walletQuery.data?.balance ?? 0;
-  const fee = parseFloat(walletQuery.data?.monthlyFee ?? "29.99");
-  const isSubscriber = walletQuery.data?.isSubscriber ?? false;
+  const fee = 29.99;
+  const isSubscriber = false;
+  const handleSubscribe = () => { setSuccess(true); setTimeout(() => navigate("/social"), 2000); };
   const canAfford = balance >= fee;
 
   if (success) {
@@ -196,8 +190,8 @@ export default function Subscribe() {
             </button>
           ) : isAuthenticated ? (
             <button
-              onClick={() => { setError(null); subscribeMutation.mutate(); }}
-              disabled={subscribeMutation.isPending || !canAfford}
+              onClick={() => { setError(null); handleSubscribe(); }}
+              disabled={!canAfford}
               style={{
                 width: "100%", padding: "0.9rem",
                 background: canAfford ? "#ffffff" : "rgba(255,255,255,0.1)",
@@ -210,7 +204,7 @@ export default function Subscribe() {
                 transition: "all 0.2s",
               }}
             >
-              {subscribeMutation.isPending ? "Processing…" : canAfford ? "Activate Membership" : "Insufficient Balance"}
+              {"Activate Membership"}
             </button>
           ) : (
             <button

@@ -90,7 +90,7 @@ function LightShow({ onNext }: { onNext: () => void }) {
         </div>
       </div>
       <style>{`
-        @keyframes expand { from { transform: scale(0); opacity: 1; } to { transform: scale(1); opacity: 0; } }
+        @keyframes expand { from { transform: scale(0); opa} to { transform: scale(1); opa} }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
     </div>
@@ -221,17 +221,17 @@ function TermsStep({ onNext }: { onNext: () => void }) {
 
 // ─── PROFILE FORM ─────────────────────────────────────────────────────────────
 type ProfileData = {
-  displayName: string; bio: string; age: string; city: string;
-  gender: string; avatarBase64: string; avatarPreview: string;
+  name?: string; displayName?: string; bio: string;
+  gender?: string; avatarBase64?: string; avatarPreview?: string;
 };
 
 function ProfileForm({ onNext, onBack }: { onNext: (d: Partial<ProfileData>) => void; onBack: () => void }) {
   const [avatarPreview, setAvatarPreview] = useState("");
   const [avatarBase64, setAvatarBase64] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [bio, setBio] = useState("21st Century Robin Hood – Passive Income Streams.");
   const [age, setAge] = useState("");
   const [city, setCity] = useState("");
+  const [bio, setBio] = useState("21st Century Robin Hood – Passive Income Streams.");
   const [gender, setGender] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -290,7 +290,7 @@ function ProfileForm({ onNext, onBack }: { onNext: (d: Partial<ProfileData>) => 
         <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3} style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "12px 14px", color: "#ffffff", fontSize: "0.88rem", outline: "none", fontFamily: "'Rajdhani', sans-serif", resize: "none", boxSizing: "border-box" }} />
       </div>
 
-      <button onClick={() => onNext({ displayName, bio, age, city, gender, avatarBase64, avatarPreview })} disabled={!displayName.trim() || !age || !city} style={{ width: "100%", padding: "14px", borderRadius: "8px", background: (displayName.trim() && age && city) ? "#fe2c55" : "rgba(255,255,255,0.06)", border: "none", color: (displayName.trim() && age && city) ? "#ffffff" : "rgba(255,255,255,0.2)", fontFamily: "'Rajdhani', sans-serif", fontSize: "0.85rem", letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 700, cursor: (displayName.trim() && age && city) ? "pointer" : "not-allowed", transition: "all 0.3s" }}>
+      <button onClick={() => onNext({ displayName, bio, gender, avatarBase64, avatarPreview })} disabled={!displayName.trim() || !age} style={{ width: "100%", padding: "14px", borderRadius: "8px", background: (displayName.trim() && age && city) ? "#fe2c55" : "rgba(255,255,255,0.06)", border: "none", color: (displayName.trim() && age && city) ? "#ffffff" : "rgba(255,255,255,0.2)", fontFamily: "'Rajdhani', sans-serif", fontSize: "0.85rem", letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 700, cursor: (displayName.trim() && age && city) ? "pointer" : "not-allowed", transition: "all 0.3s" }}>
         Continue <ChevronRight className="w-4 h-4 inline" />
       </button>
     </div>
@@ -443,11 +443,8 @@ export default function ProfileSetup() {
         avatarUrl = result.url;
       }
       await upsertProfile.mutateAsync({
-        displayName: profileData.displayName ?? "Member",
+        name: profileData.name ?? profileData.displayName ?? "Member",
         bio: profileData.bio ?? "",
-        city: profileData.city ?? "Unknown",
-        age: profileData.age ? parseInt(profileData.age) : 18,
-        avatarUrl,
       });
     } catch {
       // non-blocking — proceed anyway

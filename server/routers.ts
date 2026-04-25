@@ -373,6 +373,18 @@ const botEngineRouter = router({
       mode: input.manual ? "manual" : "auto",
     })),
 
+  recentLog: protectedProcedure.query(() => [
+    { action: "Posted", botName: "Jade Voss", ts: Date.now() - 120000 },
+    { action: "Liked", botName: "Marcus Reid", ts: Date.now() - 240000 },
+    { action: "Commented", botName: "Mia Sterling", ts: Date.now() - 360000 },
+  ]),
+  runPostJob: protectedProcedure.mutation(() => ({ success: true, published: 12, queueDepthRemaining: 330 })),
+  runCycle: protectedProcedure.mutation(() => ({ success: true, actionsQueued: 1240, message: "Cycle complete." })),
+  blitzStatus: protectedProcedure.query(() => ({
+    fired: 420,
+    pending: 580,
+    nextPostAt: new Date(Date.now() + 120000).toISOString(),
+  })),
   recentActivity: protectedProcedure.query(() => [
     { id: "a1", botName: "Jade Voss", action: "Posted", detail: "Closed 3rd Airbnb assignment this month 🔥", timestamp: new Date(Date.now() - 120000).toISOString() },
     { id: "a2", botName: "Marcus Reid", action: "Liked", detail: "Liked 12 posts in the last 5 minutes", timestamp: new Date(Date.now() - 240000).toISOString() },
@@ -433,7 +445,18 @@ const warRoomRouter = router({
   }),
 });
 
+const LIVE_MESSAGES: { id: string; userId: string; name: string; avatar: string; tier: string; message: string; ts: number }[] = [];
 const liveRouter = router({
+  getMessages: publicProcedure.query(() => LIVE_MESSAGES.slice(-50)),
+  sendMessage: protectedProcedure
+    .input(z.object({ message: z.string().min(1).max(300) }))
+    .mutation(({ ctx, input }) => {
+      const msg = { id: String(Date.now()), userId: String(ctx.user.id), name: ctx.user.name ?? "Member", avatar: "", tier: "enterprise", message: input.message, ts: Date.now() };
+      LIVE_MESSAGES.push(msg);
+      if (LIVE_MESSAGES.length > 200) LIVE_MESSAGES.splice(0, LIVE_MESSAGES.length - 200);
+      return msg;
+    }),
+  clearMessages: protectedProcedure.mutation(() => { LIVE_MESSAGES.length = 0; return { success: true }; }),
   getStreams: publicProcedure.query(() => ({
     isLive: false,
     scheduledAt: new Date(Date.now() + 86400000 * 3).toISOString(),

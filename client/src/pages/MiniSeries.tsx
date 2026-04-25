@@ -1,3 +1,20 @@
+import { useState, useRef, useEffect } from "react";
+import { useLocation } from "wouter";
+
+const CAP_LOGO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/cap_logo_master_9abf3722.png";
+
+const TRAILER_HOOKS = [
+  "21 episodes. 21 systems. One app.",
+  "The AI that earns while you sleep.",
+  "Download the app. Start the series. Change your life.",
+  "Every episode is a blueprint.",
+  "The 1% don't watch. They build.",
+];
+
+export default function MiniSeries() {
+  const [, navigate] = useLocation();
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const [glitch, setGlitch] = useState(false);
   const [activeTab, setActiveTab] = useState<"stars" | "costars">("stars");
   const [hoveredStar, setHoveredStar] = useState<string | null>(null);
@@ -118,3 +135,65 @@
         background: "radial-gradient(circle, rgba(120,0,0,0.10) 0%, transparent 70%)",
         pointerEvents: "none", zIndex: 0,
       }} />
+      {/* Main content */}
+      <div style={{ position: "relative", zIndex: 2 }}>
+        {/* Nav */}
+        <nav style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+          background: "rgba(0,0,0,0.85)", backdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          padding: "0.75rem 0",
+        }}>
+          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <img src={CAP_LOGO} alt="CAP" style={{ height: "36px", cursor: "pointer" }} onClick={() => navigate("/")} />
+            <div style={{ fontSize: "0.75rem", letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>
+              Mini Series
+            </div>
+            <button onClick={() => navigate("/")} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer", fontSize: "0.7rem" }}>
+              ← Home
+            </button>
+          </div>
+        </nav>
+
+        {/* Hero */}
+        <div style={{ padding: "6rem 0 3rem", textAlign: "center" }}>
+          <div style={{ fontSize: "0.65rem", letterSpacing: "0.6em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: "1rem" }}>
+            E Capital Venture · Flagship Launch Strategy
+          </div>
+          <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 300, letterSpacing: "0.05em", marginBottom: "1rem", lineHeight: 1.1 }}>
+            21 Episodes.
+          </h1>
+          <p style={{ fontStyle: "italic", fontSize: "1.2rem", color: "rgba(255,255,255,0.5)", marginBottom: "2rem" }}>
+            {TRAILER_HOOKS[0]}
+          </p>
+          {!submitted ? (
+            <form onSubmit={handleSubmit} style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Enter your email to get early access"
+                style={{
+                  background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.15)",
+                  color: "#fff", padding: "0.75rem 1.5rem", fontSize: "0.9rem",
+                  outline: "none", minWidth: "280px",
+                }}
+              />
+              <button type="submit" style={{
+                background: "#b8860b", border: "none", color: "#000",
+                padding: "0.75rem 2rem", fontSize: "0.8rem",
+                letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", fontWeight: 700,
+              }}>
+                Download App
+              </button>
+            </form>
+          ) : (
+            <div style={{ color: "#b8860b", fontSize: "1rem", letterSpacing: "0.1em" }}>
+              ✓ You're on the list. The app drops soon.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

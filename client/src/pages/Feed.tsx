@@ -74,7 +74,7 @@ export default function Feed() {
 
   // Redirect to profile setup if not complete
   useEffect(() => {
-    if (!loading && isAuthenticated && profile !== undefined && profile !== null && !profile.profileComplete) {
+    if (!loading && isAuthenticated && profile !== undefined && profile !== null && !profile?.name) {
       navigate("/setup");
     }
     if (!loading && isAuthenticated && profile === null) {
@@ -105,9 +105,9 @@ export default function Feed() {
   };
 
   const tier = profile?.tier ?? "silver";
-  const balanceToday = parseFloat(profile?.balanceToday ?? "0");
-  const displayName = profile?.displayName ?? user?.name ?? "Member";
-  const avatarUrl = profile?.avatarUrl;
+  const balanceToday = Number(profile?.earningsThisMonth ?? 0);
+  const displayName = profile?.name ?? user?.name ?? "Member";
+  const avatarUrl = profile?.avatar;
 
   return (
     <div style={{
@@ -173,7 +173,7 @@ export default function Feed() {
             </span>
           </div>
           <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.35)" }}>
-            {profile?.city ?? ""}
+            {profile?.handle ?? ""}
           </div>
         </div>
 

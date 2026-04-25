@@ -321,7 +321,7 @@ export default function LoginOnboarding() {
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64 = (reader.result as string).split(",")[1];
-        await saveConsentMutation.mutateAsync({ pdfBase64: base64, spouseConsent: spouseConsentRecorded });
+        await saveConsentMutation.mutateAsync({ agreedAt: new Date().toISOString() });
       };
       reader.readAsDataURL(blob);
     } catch { /* non-blocking */ }

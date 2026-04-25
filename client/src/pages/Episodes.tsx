@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 
 const CAP_LOGO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/cap_logo_master_9abf3722.png";
@@ -97,3 +98,91 @@ export default function Episodes() {
             >
               {tag}
             </button>
+          ))}
+        </div>
+      </div>
+      {/* Episode Grid */}
+      <div className="container" style={{ paddingBottom: "4rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
+          {filtered.map(ep => (
+            <div
+              key={ep.ep}
+              onMouseEnter={() => setHovered(ep.ep)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => setSelected(ep)}
+              style={{
+                background: hovered === ep.ep ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
+                border: `1px solid ${hovered === ep.ep ? "rgba(184,134,11,0.4)" : "rgba(255,255,255,0.07)"}`,
+                padding: "1.5rem",
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
+                <span style={{ fontSize: "0.6rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>
+                  EP {String(ep.ep).padStart(2, "0")}
+                </span>
+                <span style={{ fontSize: "0.6rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#b8860b", background: "rgba(184,134,11,0.1)", padding: "0.2rem 0.5rem", border: "1px solid rgba(184,134,11,0.2)" }}>
+                  {ep.tag}
+                </span>
+              </div>
+              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.2rem", fontWeight: 400, color: "#ffffff", marginBottom: "0.5rem", lineHeight: 1.3 }}>
+                {ep.title}
+              </h3>
+              <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.6, marginBottom: "1rem" }}>
+                {ep.desc}
+              </p>
+              <div style={{ fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>
+                Host: {ep.host.title} · {ep.host.origin}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Modal */}
+      {selected && (
+        <div
+          onClick={() => setSelected(null)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 100,
+            background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "2rem",
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: "#111", border: "1px solid rgba(184,134,11,0.3)",
+              padding: "2.5rem", maxWidth: "520px", width: "100%",
+            }}
+          >
+            <div style={{ fontSize: "0.6rem", letterSpacing: "0.4em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: "0.5rem" }}>
+              Episode {String(selected.ep).padStart(2, "0")} · {selected.tag}
+            </div>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.8rem", fontWeight: 300, color: "#fff", marginBottom: "1rem" }}>
+              {selected.title}
+            </h2>
+            <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, marginBottom: "1.5rem" }}>
+              {selected.desc}
+            </p>
+            <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", marginBottom: "1.5rem" }}>
+              Hosted by {selected.host.title} — {selected.host.origin}
+            </div>
+            <button
+              onClick={() => setSelected(null)}
+              style={{
+                background: "transparent", border: "1px solid rgba(255,255,255,0.2)",
+                color: "rgba(255,255,255,0.5)", padding: "0.6rem 1.5rem",
+                fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

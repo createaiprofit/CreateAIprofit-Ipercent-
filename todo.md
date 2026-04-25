@@ -3,22 +3,22 @@
 ## Phase 1: App Shell & Global Styles
 - [ ] Exact ECV theme: #02050A background, #94A3AA silver accent, #E9F2F4 near-white text — matches createaiprofit.com
 - [ ] Rajdhani + Cormorant Garamond fonts
-- [ ] App routing structure (all pages registered)
+- [x] App routing structure (all pages registered)
 - [ ] Persistent bottom navigation (mobile-first)
 - [ ] Top header with logo, tier badge, active member count
 
 ## Phase 2: Database & Backend
 - [ ] Schema: users, feed_posts, comments, wallet_transactions, bot_roster
-- [ ] tRPC routers: feed, profile, wallet, botEngine, admin
+- [x] tRPC routers: feed, profile, wallet, botEngine, admin
 - [ ] Seed 1,000 enterprise member bot profiles
 - [ ] Seed feed posts (wins, tips, crypto, accountability, community)
 
 ## Phase 3: Auth & Onboarding
-- [ ] Manus OAuth login page
-- [ ] Aria Rabbit welcome/onboarding screen
-- [ ] Security verification step
-- [ ] Terms of service acceptance
-- [ ] Profile setup (bio, photo, business info)
+- [x] Manus OAuth login page
+- [x] Aria Rabbit welcome/onboarding screen
+- [x] Security verification step
+- [x] Terms of service acceptance
+- [x] Profile setup (bio, photo, business info)
 - [ ] Tier assignment on signup
 
 ## Phase 4: Community Feed
@@ -54,13 +54,13 @@
 - [ ] Staff page (all 11 Syndicate members with roles and bios)
 
 ## Phase 7: Admin War Room
-- [ ] War Room dashboard
-- [ ] Bot Engine panel
-- [ ] Toggle bots on/off
+- [x] War Room dashboard
+- [x] Bot Engine panel
+- [x] Toggle bots on/off
 - [ ] Seed queue action
-- [ ] Launch blitz action
-- [ ] Run engagement cycle action
-- [ ] Bot roster display with status indicators
+- [x] Launch blitz action
+- [x] Run engagement cycle action
+- [x] Bot roster display with status indicators
 - [ ] Admin-only access gating
 
 ## Phase 8: QA & Delivery

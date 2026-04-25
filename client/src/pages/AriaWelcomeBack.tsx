@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { playVoice } from "@/lib/audioManager";
+import { playAudioUrl } from "@/lib/audioManager";
 
 const ARIA_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/airria_red_757e847f_29dee1ff.jpg";
 const ARIA_VOICE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/aria_login_voice_8bfb7b7e.wav";
@@ -58,7 +58,7 @@ export default function AriaWelcomeBack() {
     const t1 = setTimeout(() => setAriaVisible(true), 150);
     const t2 = setTimeout(() => {
       setGreetingVisible(true);
-      void playVoice(ARIA_VOICE, 0.9);
+      void playAudioUrl(ARIA_VOICE, 0.9);
     }, 700);
     const t3 = setTimeout(() => setPromptsVisible(true), 1600);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };

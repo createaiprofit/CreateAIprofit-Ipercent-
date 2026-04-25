@@ -143,7 +143,7 @@ function BidDialog({ listingId, askPrice, onClose }: { listingId: number; askPri
           />
         </div>
         <Button
-          onClick={() => placeBid.mutate({ listingId, amount: parseFloat(amount), note: note || undefined })}
+          onClick={() => placeBid.mutate({ listingId: String(listingId), amount: parseFloat(amount) })}
           disabled={!amount || parseFloat(amount) <= 0 || placeBid.isPending}
           className="w-full bg-gradient-to-r from-yellow-600 to-red-700 text-white border-0"
         >
@@ -159,10 +159,8 @@ export default function UserMarketplace() {
   const [category, setCategory] = useState("all");
   const [bidTarget, setBidTarget] = useState<{ id: number; price: number } | null>(null);
 
-  const { data, isLoading } = trpc.social.getListings.useQuery({
-    category: category === "all" ? undefined : category,
-    limit: 20,
-  });
+  const { data: allListings, isLoading } = trpc.social.getListings.useQuery();
+  const data = allListings?.filter(item => category === "all" || item.category === category);
 
   const handleBid = (id: number, price: number) => {
     if (!isAuthenticated) { window.location.href = getLoginUrl(); return; }
@@ -227,7 +225,7 @@ export default function UserMarketplace() {
               </div>
             ))}
           </div>
-        ) : !data?.items?.length ? (
+        ) : !data?.length ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Tag className="w-12 h-12 text-white/10" />
             <div className="text-white/30 text-sm text-center">
@@ -244,8 +242,8 @@ export default function UserMarketplace() {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            {data.items.map((listing) => (
-              <ListingCard key={listing.id} listing={listing as Listing} onBid={handleBid} />
+            {data.map((listing) => (
+              <ListingCard key={listing.id} listing={listing as unknown as Listing} onBid={handleBid} />
             ))}
           </div>
         )}

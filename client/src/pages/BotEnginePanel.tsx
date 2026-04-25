@@ -132,14 +132,14 @@ export default function BotEnginePanel() {
   }
 
   const statsQ = trpc.botEngine.stats.useQuery(undefined, { refetchInterval: 15000 });
-  const logQ = trpc.botEngine.recentLog.useQuery({ limit: 100 }, { refetchInterval: 10000 });
-  const rosterQ = trpc.botEngine.roster.useQuery({ limit: 50, offset: 0 }, { enabled: activeTab === "roster" });
+  const logQ = trpc.botEngine.recentLog.useQuery(undefined, { refetchInterval: 10000 });
+  const rosterQ = trpc.botEngine.roster.useQuery({ limit: 50, page: 0 }, { enabled: activeTab === "roster" });
 
   const runCycle = trpc.botEngine.runEngagementCycle.useMutation({
     onSuccess: (data) => {
       statsQ.refetch();
       logQ.refetch();
-      alert(`✅ Engagement cycle complete — ${data.actions} actions fired`);
+      alert(`✅ Engagement cycle complete — ${data.actionsQueued} actions fired`);
     },
     onError: (e) => alert(`❌ ${e.message}`),
   });
@@ -147,7 +147,7 @@ export default function BotEnginePanel() {
   const runPosts = trpc.botEngine.runPostJob.useMutation({
     onSuccess: (data) => {
       statsQ.refetch();
-      alert(`✅ Published ${data.published} posts — ${data.queueRemaining} in queue`);
+      alert(`✅ Published ${data.published} posts — ${data.queueDepthRemaining} in queue`);
     },
     onError: (e) => alert(`❌ ${e.message}`),
   });
@@ -212,16 +212,16 @@ export default function BotEnginePanel() {
       {/* KPI Grid */}
       <div style={S.grid}>
         {[
-          { label: "Actions Today", value: stats?.engagement?.totalActions?.toLocaleString() ?? "—", icon: <Activity className="w-4 h-4" /> },
-          { label: "Replies", value: stats?.engagement?.replies?.toLocaleString() ?? "—", icon: <MessageSquare className="w-4 h-4" /> },
-          { label: "Like-Backs", value: stats?.engagement?.likeBacks?.toLocaleString() ?? "—", icon: <Heart className="w-4 h-4" /> },
-          { label: "Comments", value: stats?.engagement?.proactiveComments?.toLocaleString() ?? "—", icon: <MessageSquare className="w-4 h-4" /> },
-          { label: "Boosts", value: stats?.engagement?.boosts?.toLocaleString() ?? "—", icon: <TrendingUp className="w-4 h-4" /> },
-          { label: "Active Bots", value: stats?.bots?.activeBots?.toLocaleString() ?? "—", icon: <Users className="w-4 h-4" /> },
-          { label: "Total Posts", value: stats?.posts?.totalPosts?.toLocaleString() ?? "—", icon: <Eye className="w-4 h-4" /> },
-          { label: "Queue Pending", value: stats?.queue?.pending?.toLocaleString() ?? "—", icon: <List className="w-4 h-4" /> },
-          { label: "Total Likes", value: stats?.posts?.totalLikes?.toLocaleString() ?? "—", icon: <Heart className="w-4 h-4" /> },
-          { label: "Total Comments", value: stats?.posts?.totalComments?.toLocaleString() ?? "—", icon: <MessageSquare className="w-4 h-4" /> },
+          { label: "Actions Today", value: stats?.actionsToday?.toLocaleString() ?? "—", icon: <Activity className="w-4 h-4" /> },
+          { label: "Replies", value: stats?.commentsToday?.toLocaleString() ?? "—", icon: <MessageSquare className="w-4 h-4" /> },
+          { label: "Like-Backs", value: stats?.likesToday?.toLocaleString() ?? "—", icon: <Heart className="w-4 h-4" /> },
+          { label: "Comments", value: stats?.commentsToday?.toLocaleString() ?? "—", icon: <MessageSquare className="w-4 h-4" /> },
+          { label: "Boosts", value: 0?.toLocaleString() ?? "—", icon: <TrendingUp className="w-4 h-4" /> },
+          { label: "Active Bots", value: stats?.activeBots?.toLocaleString() ?? "—", icon: <Users className="w-4 h-4" /> },
+          { label: "Total Posts", value: stats?.postsToday?.toLocaleString() ?? "—", icon: <Eye className="w-4 h-4" /> },
+          { label: "Queue Pending", value: stats?.queueDepth?.toLocaleString() ?? "—", icon: <List className="w-4 h-4" /> },
+          { label: "Total Likes", value: stats?.likesToday?.toLocaleString() ?? "—", icon: <Heart className="w-4 h-4" /> },
+          { label: "Total Comments", value: stats?.commentsToday?.toLocaleString() ?? "—", icon: <MessageSquare className="w-4 h-4" /> },
         ].map((k) => (
           <div key={k.label} style={S.kpi}>
             <div style={{ color: "rgba(255,255,255,0.25)", marginBottom: "4px" }}>{k.icon}</div>
@@ -272,7 +272,7 @@ export default function BotEnginePanel() {
               <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
                 <button
                   style={{ ...S.btn("primary"), background: "#fbbf24", color: "#000000", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.15em", padding: "0.75rem 2rem" }}
-                  onClick={() => launchBlitz.mutate()}
+                  onClick={() => launchBlitz.mutate({ duration: 60 })}
                   disabled={launchBlitz.isPending}
                 >
                   {launchBlitz.isPending ? "Launching..." : "🚀 LAUNCH BLITZ"}
@@ -285,7 +285,7 @@ export default function BotEnginePanel() {
                     {blitzStatusQ.data.nextPostAt && (
                       <span style={{ display: "block", marginTop: "2px", color: "rgba(255,255,255,0.3)" }}>
                         Next: {new Date(blitzStatusQ.data.nextPostAt).toLocaleTimeString()}
-                        {blitzStatusQ.data.nextCaption && ` — "${blitzStatusQ.data.nextCaption}..."`}
+                        
                       </span>
                     )}
                   </div>
@@ -323,9 +323,9 @@ export default function BotEnginePanel() {
                 </button>
               </div>
               <div style={{ paddingTop: "20px", fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
-                Queue: <strong style={{ color: "#ffffff" }}>{stats?.queue?.pending?.toLocaleString() ?? "—"}</strong> pending
+                Queue: <strong style={{ color: "#ffffff" }}>{stats?.queueDepth?.toLocaleString() ?? "—"}</strong> pending
                 &nbsp;·&nbsp;
-                <strong style={{ color: "#4ade80" }}>{stats?.queue?.posted?.toLocaleString() ?? "—"}</strong> posted
+                <strong style={{ color: "#4ade80" }}>{stats?.postsToday?.toLocaleString() ?? "—"}</strong> posted
               </div>
             </div>
           </div>
@@ -376,23 +376,22 @@ export default function BotEnginePanel() {
             </div>
           ) : (
             <div style={{ maxHeight: "500px", overflowY: "auto" }}>
-              {logQ.data?.map((entry) => (
-                <div key={entry.id} style={S.logRow}>
-                  <span style={S.badge(entry.actionType)}>{ACTION_LABELS[entry.actionType] ?? entry.actionType}</span>
+              {logQ.data?.map((entry: { id?: string; action: string; actionType?: string; botName: string; ts: number; targetUserId?: string; targetPostId?: string; body?: string; createdAt?: number }) => (
+                <div key={entry.ts} style={S.logRow}>
+                  <span style={S.badge(entry.action)}>{ACTION_LABELS[entry.action] ?? entry.action}</span>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.6)", marginBottom: "2px" }}>
                       <strong style={{ color: "#ffffff" }}>{entry.botName ?? "Bot"}</strong>
-                      {entry.targetUserId && <span style={{ color: "rgba(255,255,255,0.3)" }}> → User #{entry.targetUserId}</span>}
-                      {entry.targetPostId && <span style={{ color: "rgba(255,255,255,0.3)" }}> · Post #{entry.targetPostId}</span>}
+                      
                     </div>
-                    {entry.body && (
+                    {entry.action && (
                       <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        "{entry.body}"
+                        "{entry.action}"
                       </div>
                     )}
                   </div>
                   <div style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.25)", whiteSpace: "nowrap" }}>
-                    {new Date(entry.createdAt).toLocaleTimeString()}
+                    {new Date(entry.ts).toLocaleTimeString()}
                   </div>
                 </div>
               ))}
@@ -420,31 +419,31 @@ export default function BotEnginePanel() {
                   </tr>
                 </thead>
                 <tbody>
-                  {rosterQ.data?.bots.map((bot) => (
+                  {rosterQ.data?.bots?.map((bot: { id: string; name: string; handle: string; avatar: string; tier: string; isActive: boolean; postsToday: number; likesToday: number; commentsToday: number; lastAction: string }) => (
                     <tr key={bot.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                       <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.3)" }}>#{bot.id}</td>
-                      <td style={{ padding: "0.6rem 1rem", color: "#ffffff", fontWeight: 600 }}>{bot.displayName}</td>
-                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.5)", textTransform: "capitalize" }}>{bot.gender}</td>
-                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.5)" }}>{bot.archetype}</td>
-                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.5)" }}>{bot.city ?? "—"}</td>
+                      <td style={{ padding: "0.6rem 1rem", color: "#ffffff", fontWeight: 600 }}>{bot.name}</td>
+                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.5)", textTransform: "capitalize" }}>{""}</td>
+                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.5)" }}>{bot.tier}</td>
+                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.5)" }}>{bot.handle ?? "—"}</td>
                       <td style={{ padding: "0.6rem 1rem" }}>
                         <span style={{
                           padding: "2px 8px", borderRadius: "3px", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase",
-                          background: bot.tier === "platinum" ? "rgba(168,85,247,0.2)" : bot.tier === "gold" ? "rgba(234,179,8,0.2)" : "rgba(148,163,184,0.2)",
-                          color: bot.tier === "platinum" ? "#d8b4fe" : bot.tier === "gold" ? "#fde68a" : "#94a3b8",
+                          background: bot.tier === "enterprise" ? "rgba(168,85,247,0.2)" : bot.tier === "enterprise" ? "rgba(234,179,8,0.2)" : "rgba(148,163,184,0.2)",
+                          color: bot.tier === "enterprise" ? "#d8b4fe" : bot.tier === "enterprise" ? "#fde68a" : "#94a3b8",
                         }}>
                           {bot.tier}
                         </span>
                       </td>
-                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.6)" }}>{bot.followerCount.toLocaleString()}</td>
+                      <td style={{ padding: "0.6rem 1rem", color: "rgba(255,255,255,0.6)" }}>{bot.postsToday.toLocaleString()}</td>
                       <td style={{ padding: "0.6rem 1rem" }}>
                         <button
-                          onClick={() => toggleBot.mutate({ botId: bot.id, active: !bot.active })}
-                          style={{ background: "none", border: "none", cursor: "pointer", color: bot.active ? "#4ade80" : "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", gap: "4px" }}
+                          onClick={() => toggleBot.mutate({ botId: bot.id, active: !bot.isActive })}
+                          style={{ background: "none", border: "none", cursor: "pointer", color: bot.isActive ? "#4ade80" : "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", gap: "4px" }}
                         >
-                          {bot.active ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />}
+                          {bot.isActive ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />}
                           <span style={{ fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                            {bot.active ? "Active" : "Off"}
+                            {bot.isActive ? "Active" : "Off"}
                           </span>
                         </button>
                       </td>

@@ -37,7 +37,7 @@ export default function SocialEntry() {
   useEffect(() => {
     if (step !== "checking") return;
     if (walletQuery.isLoading) return;
-    if (walletQuery.data?.isSubscriber) {
+    if (walletQuery.data?.tier === "enterprise") {
       setStep("enter");
       setTimeout(() => navigate("/social"), 1200);
     } else {

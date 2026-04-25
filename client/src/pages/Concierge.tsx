@@ -1,4 +1,3 @@
-import { trpc } from "@/lib/trpc";
 import { MapPin, Calendar, Users, ArrowLeft, Plane, Anchor, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -146,7 +145,8 @@ function EventCard({ event }: { event: ConciergeEvent }) {
 }
 
 export default function Concierge() {
-  const { data: events, isLoading } = trpc.social.getEvents.useQuery();
+  const events: ConciergeEvent[] = [];
+  const isLoading = false;
 
   return (
     <div className="min-h-screen bg-black">

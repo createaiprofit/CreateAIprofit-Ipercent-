@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-import { speakText, stopSpeech } from "@/lib/audioManager";
+
 
 // ─── ASSETS ───────────────────────────────────────────────────────────────────
 const CAP_LOGO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663435070666/UKZTwoEXuGkRzDU2B5gMpQ/cap_logo_master_9abf3722.png";
@@ -766,10 +766,10 @@ function LiveFeedTab({ setActiveTab }: { setActiveTab: (t: Tab) => void }) {
   );
 
   useEffect(() => {
-    if (data?.items) {
+    if (data?.posts) {
       setAllPosts(prev => {
         const existingIds = new Set(prev.map((p: any) => p.id));
-        const newItems = data.items.filter((p: any) => !existingIds.has(p.id));
+        const newItems = data.posts.filter((p: any) => !existingIds.has(p.id));
         return [...prev, ...newItems];
       });
     }
