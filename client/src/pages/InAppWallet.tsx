@@ -45,7 +45,7 @@ export default function InAppWallet() {
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.3rem", fontWeight: 300, fontStyle: "italic", letterSpacing: "0.05em" }}>
             Earnings Vault
           </div>
-          <TierBadge tier={walletQ.data?.tier === "enterprise" || walletQ.data?.tier === "gold" ? "gold" : "silver"} size="md" />
+          <TierBadge tier={walletQ.data?.isSubscriber ? "gold" : "silver"} size="md" />
         </div>
       </div>
 
@@ -88,8 +88,8 @@ export default function InAppWallet() {
           </div>
           <div>
             <div style={{ fontSize: "0.55rem", letterSpacing: "0.35em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: "4px" }}>Status</div>
-            <div style={{ fontSize: "0.95rem", fontWeight: 700, color: walletQ.data?.tier === "enterprise" || walletQ.data?.tier === "gold" ? "rgba(200,215,240,0.9)" : "#fde68a" }}>
-              {walletQ.data?.tier === "enterprise" || walletQ.data?.tier === "gold" ? "Active Member" : "Inactive"}
+            <div style={{ fontSize: "0.95rem", fontWeight: 700, color: walletQ.data?.isSubscriber ? "rgba(200,215,240,0.9)" : "#fde68a" }}>
+              {walletQ.data?.isSubscriber ? "Active Member" : "Inactive"}
             </div>
           </div>
           <div>
@@ -198,7 +198,7 @@ export default function InAppWallet() {
                     {tx.description ?? "Earnings credit"}
                   </div>
                   <div style={{ fontSize: "0.62rem", color: "rgba(255,255,255,0.3)" }}>
-                    {new Date(tx.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    {new Date(tx.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                   </div>
                 </div>
                 <div style={{

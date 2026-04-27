@@ -221,7 +221,7 @@ function TermsStep({ onNext }: { onNext: () => void }) {
 
 // ─── PROFILE FORM ─────────────────────────────────────────────────────────────
 type ProfileData = {
-  name: string; bio: string; age: string; city: string;
+  displayName: string; bio: string; age: string; city: string;
   gender: string; avatarBase64: string; avatarPreview: string;
 };
 
@@ -443,7 +443,7 @@ export default function ProfileSetup() {
         avatarUrl = result.url;
       }
       await upsertProfile.mutateAsync({
-        name: profileData.displayName ?? "Member",
+        displayName: profileData.displayName ?? "Member",
         bio: profileData.bio ?? "",
         city: profileData.city ?? "Unknown",
         age: profileData.age ? parseInt(profileData.age) : 18,

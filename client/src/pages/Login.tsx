@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { playVoiceLine as playVoice } from "@/lib/audioManager";
+import { playVoice } from "@/lib/audioManager";
 import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";

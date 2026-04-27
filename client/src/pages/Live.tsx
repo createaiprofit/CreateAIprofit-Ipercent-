@@ -67,7 +67,7 @@ export default function Live() {
   };
 
   const isAdmin = user?.role === "admin";
-  const displayName = profile?.name ?? user?.name ?? "Member";
+  const displayName = profile?.displayName ?? user?.name ?? "Member";
   const tier = profile?.tier ?? "silver";
 
   return (
@@ -310,7 +310,7 @@ export default function Live() {
                 Be the first to say something.
               </div>
             ) : (
-              messages.map((msg: any) => (
+              messages.map((msg) => (
                 <div key={msg.id} style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start" }}>
                   {/* Avatar */}
                   <div style={{
@@ -320,11 +320,11 @@ export default function Live() {
                     background: "rgba(255,255,255,0.05)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    {msg.avatar ? (
-                      <img src={msg.avatar} alt={msg.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    {msg.avatarUrl ? (
+                      <img src={msg.avatarUrl} alt={msg.displayName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : (
                       <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)" }}>
-                        {msg.name.charAt(0).toUpperCase()}
+                        {msg.displayName.charAt(0).toUpperCase()}
                       </span>
                     )}
                   </div>
@@ -332,7 +332,7 @@ export default function Live() {
                   <div style={{ flex: 1 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.15rem" }}>
                       <span style={{ fontSize: "0.75rem", fontWeight: 700, color: TIER_COLORS[msg.tier] }}>
-                        {msg.name}
+                        {msg.displayName}
                       </span>
                       <span style={{
                         fontSize: "0.5rem", letterSpacing: "0.15em", textTransform: "uppercase",
@@ -366,8 +366,8 @@ export default function Live() {
               background: "rgba(255,255,255,0.05)",
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              {profile?.avatar ? (
-                <img src={profile.avatar} alt={displayName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              {profile?.avatarUrl ? (
+                <img src={profile.avatarUrl} alt={displayName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               ) : (
                 <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>
                   {displayName.charAt(0).toUpperCase()}

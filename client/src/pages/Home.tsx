@@ -766,10 +766,10 @@ function LiveFeedTab({ setActiveTab }: { setActiveTab: (t: Tab) => void }) {
   );
 
   useEffect(() => {
-    if (data?.posts) {
+    if (data?.items) {
       setAllPosts(prev => {
         const existingIds = new Set(prev.map((p: any) => p.id));
-        const newItems = data.posts.filter((p: any) => !existingIds.has(p.id));
+        const newItems = data.items.filter((p: any) => !existingIds.has(p.id));
         return [...prev, ...newItems];
       });
     }
